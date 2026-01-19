@@ -16,22 +16,35 @@ internal static class GunMapper
             return;
         }
 
-        GearItem? gearItem = modGunComponent.gameObject.GetComponent<GearItem>();
-        if (gearItem == null)
-        {
-            return;
-        }
-
-        GunItem gunItem = ComponentUtils.GetOrCreateComponent<GunItem>(modGunComponent);
-        gunItem.m_GearItem = gearItem;
-        gearItem.m_GunItem = gunItem;
-
+        if (!GetGearItem(modGunComponent, out GearItem gearItem)) return;
+        GetOrCreateGunItem(modGunComponent, gearItem, out GunItem gunItem);
         if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
         ConfigureAudioReferences(modGunComponent, gunItem);
         ConfigureSpriteReferences(modGunComponent, gunItem);
         ConfigureDetails(modGunComponent, gunItem);
     }
+
+
+    private static bool GetGearItem(ModGunComponent modGunComponent, out GearItem gearItem)
+    {
+        gearItem = modGunComponent.gameObject.GetComponent<GearItem>();
+        if (gearItem == null)
+        {
+            MelonLogger.Error($"Could not configure GunItem.GearItem during GunMapper.Configure: Could not find GearItem!");
+            return false;
+        }
+        return true;
+    }
+
+
+    private static void GetOrCreateGunItem(ModGunComponent modGunComponent, GearItem gearItem, out GunItem gunItem)
+    {
+        gunItem = ComponentUtils.GetOrCreateComponent<GunItem>(modGunComponent);
+        gunItem.m_GearItem = gearItem;
+        gearItem.m_GunItem = gunItem;
+    }
+
 
     private static bool ConfigureCasingReference(ModGunComponent modGunComponent, GunItem gunItem)
     {
