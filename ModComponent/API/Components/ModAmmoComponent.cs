@@ -11,10 +11,30 @@ public class ModAmmoComponent : ModBaseComponent
 
 	public ModAmmoComponent(IntPtr intPtr) : base(intPtr) { }
 
-	/// <summary>
-	/// (Il2Cpp.GunType) The type of gun this bullet is compatible with.
-	/// </summary>
-	public GunType AmmoForGunType;
+
+    /// <summary>
+    /// The type of gun this bullet is compatible with using modded wrapper type.
+    /// </summary>
+    public ModGunComponent.ModdedGunType AmmoForModdedGunType;
+
+    /// <summary>
+    /// (Il2Cpp.GunType) The type of gun this bullet is compatible with.
+    /// UPDATED: READ ONLY - Assign your gun type as ModdedGunType to include option for new gun types!
+    /// </summary>
+    public GunType AmmoForGunType => (GunType)AmmoForModdedGunType;
+
+
+    /// <summary>
+    /// Sprite to be used for "loaded" ammo on HUD
+    /// </summary>
+    public string LoadedHudIconSpriteName;
+
+
+    /// <summary>
+    /// Sprite to be used for "Unloaded" ammo on HUD
+    /// </summary>
+    public string EmptyHudIconSpriteName;
+
 
     void Awake()
     {
@@ -27,6 +47,8 @@ public class ModAmmoComponent : ModBaseComponent
         base.InitializeComponent(jsonDict, className);
 		JsonDictEntry entry = jsonDict.GetEntry(className);
 
-		AmmoForGunType = entry.GetEnum<GunType>("AmmoForGunType");
-	}
+        AmmoForModdedGunType = entry.GetEnum<ModGunComponent.ModdedGunType>("AmmoForModdedGunType");
+        LoadedHudIconSpriteName = entry.GetString("LoadedHudIconSpriteName");
+        EmptyHudIconSpriteName = entry.GetString("EmptyHudIconSpriteName");
+    }
 }
