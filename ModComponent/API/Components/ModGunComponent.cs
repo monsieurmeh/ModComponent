@@ -36,7 +36,7 @@ public partial class ModGunComponent : ModGenericComponent
     /// ModComponent will fetch the gearitemdata from the gear item. 
     /// Linked prefab MUST have an AmmoItem as well or ModComponent will ignore.
     /// </summary>
-    public List<string> AmmoReferences = new List<string>();
+    public string[] AmmoReferences = [];
 
 
     /// <summary>
@@ -52,5 +52,12 @@ public partial class ModGunComponent : ModGenericComponent
     internal override void InitializeComponent(JsonDict jsonDict, string className = "ModGunComponent")
     {
         base.InitializeComponent(jsonDict, className);
+        JsonDictEntry entry = jsonDict.GetEntry(className);
+
+        this.GunType = (ModdedGunType)entry.GetInt("GunType");
+        this.AmmoReferences = entry.GetArray<string>("AmmoReferences");
+        this.AmmoSpriteName = entry.GetString("AmmoSpriteName");
+
+
     }
 }
