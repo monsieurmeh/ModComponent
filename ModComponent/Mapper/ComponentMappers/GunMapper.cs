@@ -18,6 +18,7 @@ internal static class GunMapper
 
         if (!GetGearItem(modGunComponent, out GearItem gearItem)) return;
         GetOrCreateGunItem(modGunComponent, gearItem, out GunItem gunItem);
+        if (!ConfigureRadialToAcceptGearItemForWeaponEquip(gearItem)) return;
         if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
         ConfigureAudioReferences(modGunComponent, gunItem);
@@ -43,6 +44,31 @@ internal static class GunMapper
         gunItem = ComponentUtils.GetOrCreateComponent<GunItem>(modGunComponent);
         gunItem.m_GearItem = gearItem;
         gearItem.m_GunItem = gunItem;
+    }
+
+
+    private static bool ConfigureRadialToAcceptGearItemForWeaponEquip(GearItem gearItem)
+    {
+        MelonLogger.Msg("ConfigureRadial");
+        Panel_ActionsRadial radialActionsPanel = InterfaceManager.GetPanel<Panel_ActionsRadial>();
+        if (radialActionsPanel == null)
+        {
+            MelonLogger.Error("Null Panel_ActionsRadial");
+            return false;
+        }
+        if (radialActionsPanel.m_WeaponRadialOrder.Contains($"GEAR_{gearItem.m_GearItemData.name}"))
+        {
+            //already included, no need to add
+            return true;
+        }
+        Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStringArray newWeaponFilterList = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStringArray(radialActionsPanel.m_WeaponRadialOrder.Length + 1);
+        for (int i = 0, iMax = radialActionsPanel.m_WeaponRadialOrder.Length; i < iMax; i++)
+        {
+            newWeaponFilterList[i] = radialActionsPanel.m_WeaponRadialOrder[i];
+        }
+        newWeaponFilterList[^1] = $"GEAR_{gearItem.m_GearItemData.name}";
+        radialActionsPanel.m_WeaponRadialOrder = newWeaponFilterList;
+        return true;
     }
 
 
