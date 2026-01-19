@@ -51,6 +51,41 @@ public partial class ModGunComponent : ModGenericComponent
     public string CasingReference = "RifleCasingName"; //WIP
 
 
+    /// <summary>
+    /// Sound ID for Casing audio. Defaults to rifle audio.
+    /// </summary>
+    public string CasingAudio = "RifleCasingAudo"; //WIP
+
+
+    /// <summary>
+    /// Sound ID for dry fire audio. Defaults to rifle audio.
+    /// </summary>
+    public string DryFireAudio = "RifleDryFireAudio"; //WIP
+
+
+    /// <summary>
+    /// Sound ID for fire audio. Defaults to rifle audio.
+    /// </summary>
+    public string FireAudio = "RifleFireAudio"; //WIP
+
+
+    /// <summary>
+    /// Sound ID for projectile impact audio. Defaults to rifle audio.
+    /// </summary>
+    public string ImpactAudio = "RifleImpactAudio"; //WIP
+
+
+    /// <summary>
+    /// Sound ID for uncock audio. Defaults to rifle audio.
+    /// </summary>
+    public string UncockAudio = "RifleUncockAudio"; //WIP
+
+
+    /// <summary>
+    /// Sound ID for out-of-stamina soundbite while aiming. Defaults to rifle audio.
+    /// </summary>
+    public string AimingStaminaExhaustedSound = "RifleAimingStaminaExhaustedSound"; //WIP
+
 
     public ModGunComponent(System.IntPtr intPtr) : base(intPtr) { }
 
@@ -65,6 +100,11 @@ public partial class ModGunComponent : ModGenericComponent
         this.AmmoReferences = entry.GetArray<string>("AmmoReferences");
         this.AmmoSpriteName = entry.GetString("AmmoSpriteName");
         this.CasingReference = entry.GetString("CasingReference");
-
+        this.CasingAudio = entry.GetString("CasingAudio");
+        this.DryFireAudio = entry.GetString("DryFireAudio");
+        this.FireAudio = entry.GetString("FireAudio");
+        this.ImpactAudio = entry.GetString("ImpactAudio");
+        this.UncockAudio = entry.GetString("UncockAudio");
+        this.AimingStaminaExhaustedSound = entry.GetString("AimingStaminaExhaustedSound");
     }
 }

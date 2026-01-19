@@ -28,6 +28,7 @@ internal static class GunMapper
 
         if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
+        ConfigureAudioReferences(modGunComponent, gunItem);
 
         gunItem.m_AmmoSpriteName = modGunComponent.AmmoSpriteName;
     }
@@ -53,7 +54,7 @@ internal static class GunMapper
             GearItemData casingGearItemData = casingGearItem.m_GearItemData;
             if (casingGearItemData == null)
             {
-                MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: Could not get GearItemData from GearItem attached to prefab fetched by asset name {modGunComponent.CasingReference}";
+                MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: Could not get GearItemData from GearItem attached to prefab fetched by asset name {modGunComponent.CasingReference}");
                 return false;
             }
 
@@ -75,6 +76,17 @@ internal static class GunMapper
         {
             gunItem.m_AmmoReferences.Add(new AssetReferenceT<Il2CppTLD.Gear.GearItemData>(GearNameToModdedGearItemDataName(ammoRef)));
         }
+    }
+
+
+    private static void ConfigureAudioReferences(ModGunComponent modGunComponent, GunItem gunItem)
+    {
+        gunItem.m_CasingAudio = modGunComponent.CasingAudio;
+        gunItem.m_DryFireAudio = modGunComponent.DryFireAudio;
+        gunItem.m_FireAudio = ModUtils.MakeAudioEvent(modGunComponent.FireAudio);
+        gunItem.m_ImpactAudio = modGunComponent.ImpactAudio;
+        gunItem.m_UncockAudio = modGunComponent.UncockAudio;
+        gunItem.m_AimingStaminaExhaustedSound = modGunComponent.AimingStaminaExhaustedSound;
     }
 
 
