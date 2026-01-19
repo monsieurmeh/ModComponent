@@ -40,51 +40,117 @@ public partial class ModGunComponent : ModGenericComponent
 
 
     /// <summary>
-    /// Addressable asset name for ammo sprite to be displayed on screen. Defaults to rifle ammo sprite.
+    /// Addressable asset name for ammo sprite to be displayed on screen. 
     /// </summary>
     public string AmmoSpriteName = "RifleSpriteName"; //WIP
 
 
     /// <summary>
-    /// Addressable asset name for casing gear prefab to be dropped on the ground. Defaults to rifle casing name.
+    /// Addressable asset name for casing gear prefab to be dropped on the ground. 
     /// </summary>
     public string CasingReference = "RifleCasingName"; //WIP
 
 
     /// <summary>
-    /// Sound ID for Casing audio. Defaults to rifle audio.
+    /// Sound ID for Casing audio. 
     /// </summary>
     public string CasingAudio = "RifleCasingAudo"; //WIP
 
 
     /// <summary>
-    /// Sound ID for dry fire audio. Defaults to rifle audio.
+    /// Sound ID for dry fire audio.
     /// </summary>
     public string DryFireAudio = "RifleDryFireAudio"; //WIP
 
 
     /// <summary>
-    /// Sound ID for fire audio. Defaults to rifle audio.
+    /// Sound ID for fire audio.
     /// </summary>
     public string FireAudio = "RifleFireAudio"; //WIP
 
 
     /// <summary>
-    /// Sound ID for projectile impact audio. Defaults to rifle audio.
+    /// Sound ID for projectile impact audio.
     /// </summary>
     public string ImpactAudio = "RifleImpactAudio"; //WIP
 
 
     /// <summary>
-    /// Sound ID for uncock audio. Defaults to rifle audio.
+    /// Sound ID for uncock audio.
     /// </summary>
     public string UncockAudio = "RifleUncockAudio"; //WIP
 
 
     /// <summary>
-    /// Sound ID for out-of-stamina soundbite while aiming. Defaults to rifle audio.
+    /// Sound ID for out-of-stamina soundbite while aiming.
     /// </summary>
     public string AimingStaminaExhaustedSound = "RifleAimingStaminaExhaustedSound"; //WIP
+
+
+    /// <summary>
+    /// Controls how many rounds can be loaded at once.
+    /// </summary>
+    public int ClipSize = 12;
+
+
+    /// <summary>
+    /// (TESTING NEEDED) Number of rounds to speed-load when possible.
+    /// </summary>
+    public int RoundsToReloadPerClip = 6;
+
+
+    /// <summary>
+    /// Default damage per shot. 
+    /// </summary>
+    public int DamageHP = 100;
+
+
+    /// <summary>
+    /// Default maximum range of weapon.
+    /// </summary>
+    public int AccuracyRange = 65;
+
+
+    /// <summary>
+    /// (TESTING NEEDED) Cooldown between attempts to reload the gun.
+    /// </summary>
+    public float ReloadCooldownSeconds = 2f;
+
+
+    /// <summary>
+    /// Minimum distance needed for aim assist to kick in
+    /// </summary>
+    public int MinDistanceForAimAssist = 30;
+
+
+    /// <summary>
+    /// Delay after firing before muzzle flash occurs in seconds.
+    /// </summary>
+    public float MuzzleFlash_FlashDelay = 0.1f;
+
+
+    /// <summary>
+    /// Delay after firing before muzzle smoke appears in seconds.
+    /// </summary>
+    public float MuzzleFlash_SmokeDelay = 0.15f;
+
+
+    /// <summary>
+    /// (TESTING NEEDED) UNKNOWN
+    /// </summary>
+    public float SwayValueMaxFatigue = 0.75f;
+
+
+    /// <summary>
+    /// (TESTING NEEDED) UNKNOWN
+    /// </summary>
+    public float SwayIncreasePerSecond = 0.1f;
+
+
+    /// <summary>
+    /// (TESTING NEEDED) UNKNOWN
+    /// </summary>
+    public float SwayDecreasePerSecond = 0.15f;
 
 
     public ModGunComponent(System.IntPtr intPtr) : base(intPtr) { }
@@ -106,5 +172,16 @@ public partial class ModGunComponent : ModGenericComponent
         this.ImpactAudio = entry.GetString("ImpactAudio");
         this.UncockAudio = entry.GetString("UncockAudio");
         this.AimingStaminaExhaustedSound = entry.GetString("AimingStaminaExhaustedSound");
+        this.ClipSize = entry.GetInt("ClipSize");
+        this.RoundsToReloadPerClip = entry.GetInt("RoundsToReloadPerClip");
+        this.DamageHP = entry.GetInt("DamageHP");
+        this.AccuracyRange = entry.GetInt("AccuracyRange");
+        this.ReloadCooldownSeconds = entry.GetFloat("ReloadCooldownSeconds");
+        this.MinDistanceForAimAssist = entry.GetInt("MinDistanceForAimAssist");
+        this.MuzzleFlash_FlashDelay = entry.GetFloat("MuzzleFlash_FlashDelay");
+        this.MuzzleFlash_SmokeDelay = entry.GetFloat("MuzzleFlash_SmokeDelay");
+        this.SwayValueMaxFatigue = entry.GetFloat("SwayValueMaxFatigue");
+        this.SwayIncreasePerSecond = entry.GetFloat("SwayIncreasePerSecond");
+        this.SwayDecreasePerSecond = entry.GetFloat("SwayDecreasePerSecond");
     }
 }

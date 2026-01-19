@@ -29,8 +29,8 @@ internal static class GunMapper
         if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
         ConfigureAudioReferences(modGunComponent, gunItem);
-
-        gunItem.m_AmmoSpriteName = modGunComponent.AmmoSpriteName;
+        ConfigureSpriteReferences(modGunComponent, gunItem);
+        ConfigureDetails(modGunComponent, gunItem);
     }
 
     private static bool ConfigureCasingReference(ModGunComponent modGunComponent, GunItem gunItem)
@@ -87,6 +87,27 @@ internal static class GunMapper
         gunItem.m_ImpactAudio = modGunComponent.ImpactAudio;
         gunItem.m_UncockAudio = modGunComponent.UncockAudio;
         gunItem.m_AimingStaminaExhaustedSound = modGunComponent.AimingStaminaExhaustedSound;
+    }
+
+
+    private static void ConfigureSpriteReferences(ModGunComponent modGunComponent, GunItem gunItem)
+    {
+        gunItem.m_AmmoSpriteName = modGunComponent.AmmoSpriteName;
+    }
+
+
+    private static void ConfigureDetails(ModGunComponent modGunComponent, GunItem gunItem)
+    {
+        gunItem.m_ClipSize = modGunComponent.ClipSize;
+        gunItem.m_RoundsToReloadPerClip = modGunComponent.RoundsToReloadPerClip;
+        gunItem.m_DamageHP = modGunComponent.DamageHP;
+        gunItem.m_AccuracyRange = modGunComponent.AccuracyRange;
+        gunItem.m_MinDistanceForAimAssist = modGunComponent.MinDistanceForAimAssist;
+        gunItem.m_MuzzleFlash_FlashDelay = modGunComponent.MuzzleFlash_FlashDelay;
+        gunItem.m_MuzzleFlash_SmokeDelay = modGunComponent.MuzzleFlash_SmokeDelay;
+        gunItem.m_SwayValueMaxFatigue = modGunComponent.SwayValueMaxFatigue;
+        gunItem.m_SwayIncreasePerSecond = modGunComponent.SwayIncreasePerSecond;
+        gunItem.m_SwayDecreasePerSecond = modGunComponent.SwayDecreasePerSecond;
     }
 
 
