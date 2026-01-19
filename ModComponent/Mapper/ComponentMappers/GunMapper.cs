@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppTLD.Gear;
 using ModComponent.API.Components;
 using ModComponent.Utils;
 using UnityEngine.AddressableAssets;
@@ -17,9 +18,46 @@ internal static class GunMapper
 
         GunItem gunItem = ComponentUtils.GetOrCreateComponent<GunItem>(modGunComponent);
 
-        gunItem.m_GunType = modGunComponent.VanillaGunType;
+        if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
+
+        gunItem.m_GunType = modGunComponent.VanillaGunType;
         gunItem.m_AmmoSpriteName = modGunComponent.AmmoSpriteName;
+    }
+
+    private static bool ConfigureCasingReference(ModGunComponent modGunComponent, GunItem gunItem)
+    {
+        try
+        {
+            GameObject casingPrefab = Addressables.LoadAssetAsync<GameObject>(modGunComponent.CasingReference).WaitForCompletion();
+            if (casingPrefab == null)
+            {
+                MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: No asset found with name {modGunComponent.CasingReference}");
+                return false;
+            }
+
+            GearItem casingGearItem = casingPrefab.GetComponent<GearItem>();
+            if (casingGearItem == null)
+            {
+                MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: Could not get GearItem from prefab fetched by asset name {modGunComponent.CasingReference}");
+                return false;
+            }
+
+            GearItemData casingGearItemData = casingGearItem.m_GearItemData;
+            if (casingGearItemData == null)
+            {
+                MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: Could not get GearItemData from GearItem attached to prefab fetched by asset name {modGunComponent.CasingReference}";
+                return false;
+            }
+
+            gunItem.m_CasingData = casingGearItemData;
+            return true;
+        }
+        catch (Exception e)
+        {
+            MelonLogger.Error($"Could not configure GunItem.m_CasingData during GunMapper.Configure: {e}");
+            return false;
+        }
     }
 
 
@@ -31,8 +69,6 @@ internal static class GunMapper
             gunItem.m_AmmoReferences.Add(new AssetReferenceT<Il2CppTLD.Gear.GearItemData>(GearNameToModdedGearItemDataName(ammoRef)));
         }
     }
-
-
 
 
     /// <summary>

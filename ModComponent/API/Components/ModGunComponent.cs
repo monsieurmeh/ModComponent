@@ -42,7 +42,14 @@ public partial class ModGunComponent : ModGenericComponent
     /// <summary>
     /// Addressable asset name for ammo sprite to be displayed on screen. Defaults to rifle ammo sprite.
     /// </summary>
-    public string AmmoSpriteName = "RifleSpriteName"; //FIX
+    public string AmmoSpriteName = "RifleSpriteName"; //WIP
+
+
+    /// <summary>
+    /// Addressable asset name for casing gear prefab to be dropped on the ground. Defaults to rifle casing name.
+    /// </summary>
+    public string CasingReference = "RifleCasingName"; //WIP
+
 
 
     public ModGunComponent(System.IntPtr intPtr) : base(intPtr) { }
@@ -57,7 +64,7 @@ public partial class ModGunComponent : ModGenericComponent
         this.GunType = (ModdedGunType)entry.GetInt("GunType");
         this.AmmoReferences = entry.GetArray<string>("AmmoReferences");
         this.AmmoSpriteName = entry.GetString("AmmoSpriteName");
-
+        this.CasingReference = entry.GetString("CasingReference");
 
     }
 }
