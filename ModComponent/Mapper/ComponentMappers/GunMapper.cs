@@ -16,12 +16,19 @@ internal static class GunMapper
             return;
         }
 
+        GearItem? gearItem = modGunComponent.gameObject.GetComponent<GearItem>();
+        if (gearItem == null)
+        {
+            return;
+        }
+
         GunItem gunItem = ComponentUtils.GetOrCreateComponent<GunItem>(modGunComponent);
+        gunItem.m_GearItem = gearItem;
+        gearItem.m_GunItem = gunItem;
 
         if (!ConfigureCasingReference(modGunComponent, gunItem)) return;
         ConfigureAmmoReferences(modGunComponent, gunItem);
 
-        gunItem.m_GunType = modGunComponent.VanillaGunType;
         gunItem.m_AmmoSpriteName = modGunComponent.AmmoSpriteName;
     }
 
