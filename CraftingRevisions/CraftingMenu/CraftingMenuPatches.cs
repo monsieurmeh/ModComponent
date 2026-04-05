@@ -45,43 +45,80 @@ namespace CraftingRevisions.CraftingMenu
 		//		return false;
 		//	}
 		//}
-
-		[HarmonyPatch(typeof(Panel_Crafting), "Initialize")]
-		internal static class Panel_Crafting_Start
+		[HarmonyPatch(typeof(Panel_Crafting), "Update")]
+		internal static class Panel_Crafting_Update_Patch
 		{
-			private static void Postfix(Panel_Crafting __instance)
+			private static bool _hasInjected = false;
+
+			private static void Prefix(Panel_Crafting __instance)
 			{
-				CategoryButtonNavigation categoryNavigation = __instance.m_CategoryNavigation;
-				var buttonList = categoryNavigation.m_NavigationButtons;
-				UIButton toolsButton = new();
-				foreach (UIButton button in buttonList)
+				if (_hasInjected) return;
+
+				if (__instance.m_CategoryNavigation == null) return;
+
+				var buttonList = __instance.m_CategoryNavigation.m_NavigationButtons;
+				
+				if (buttonList == null || buttonList.Count < 3) return;
+
+				foreach (var btn in buttonList)
 				{
-					if (button.name.ToLower().Contains("deco"))
+					if (btn != null && btn.name == "Button_Material")
 					{
-						toolsButton = button;
+						_hasInjected = true;
+						return;
 					}
 				}
-				UIButton materialButton = toolsButton.Instantiate();
-				UIButton foodButton = toolsButton.Instantiate();
-				//				UIButton craftableButton = toolsButton.Instantiate();
-				foodButton.name = "Button_Food";
-				materialButton.name = "Button_Material";
-				//				craftableButton.name = "Button_Craftable";
+
+				try 
+				{
+					DoInjection(__instance);
+					_hasInjected = true; 
+					MelonLogger.Msg("Injection Successful via Update Hook.");
+				}
+				catch (System.Exception ex)
+				{
+					// If it fails, we don't set _hasInjected so it can try again next frame
+					MelonLogger.Error($"Injection failed: {ex}");
+				}
+			}
+
+			private static void DoInjection(Panel_Crafting panel)
+			{
+				var categoryNavigation = panel.m_CategoryNavigation;
+				var buttonList = categoryNavigation.m_NavigationButtons;
+
+				UIButton toolsButton = null;
+				foreach (var button in buttonList)
+				{
+					if (button != null && button.name.ToLower().Contains("deco"))
+					{
+						toolsButton = button;
+						break;
+					}
+				}
+
+				if (toolsButton == null) return;
+
+				GameObject materialObj = UnityEngine.Object.Instantiate(toolsButton.gameObject, toolsButton.transform.parent);
+				materialObj.name = "Button_Material";
+				
+				GameObject foodObj = UnityEngine.Object.Instantiate(toolsButton.gameObject, toolsButton.transform.parent);
+				foodObj.name = "Button_Food";
+
+				UIButton materialButton = materialObj.GetComponent<UIButton>();
+				UIButton foodButton = foodObj.GetComponent<UIButton>();
+
 				EventDelegate.Set(materialButton.onClick, new System.Action(() => categoryNavigation.OnNavigationChanged(materialButton)));
 				EventDelegate.Set(foodButton.onClick, new System.Action(() => categoryNavigation.OnNavigationChanged(foodButton)));
-				//				EventDelegate.Set(craftableButton.onClick, new System.Action(() => categoryNavigation.OnNavigationChanged(craftableButton)));
-				foodButton.Move(0, -62, 0);
-				materialButton.Move(0, -124, 0);
-				//				craftableButton.transform.localPosition = new Vector3(0f,64f,0f);
-				//				craftableButton.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-				buttonList.Add(materialButton);
-				buttonList.Add(foodButton);
-				//				buttonList.Add(craftableButton);
+
+				materialButton.transform.localPosition = toolsButton.transform.localPosition + new Vector3(0, -62, 0);
+				foodButton.transform.localPosition = toolsButton.transform.localPosition + new Vector3(0, -124, 0);
 
 				materialButton.SetSpriteName("ico_crafting");
 				foodButton.SetSpriteName("ico_Radial_food");
-				//				craftableButton.SetSpriteName("ico_map");
-				buttonList[0].SetSpriteName("ico_Radial_pack");
+
+				buttonList.Add(materialButton);
+				buttonList.Add(foodButton);
 			}
 		}
 
