@@ -20,7 +20,7 @@ internal class LiquidItemPatch
 
 			if (__instance.m_Minimum.m_Units == 0f && __instance.m_LiquidType == LiquidType.GetPotableWater())
 			{
-				__instance.m_Liquid = ItemLiquidVolume.FromLiters(ModComponent.Utils.RandomUtils.Range(__instance.GetCapacityLitres().m_Units / 8f, __instance.GetCapacityLitres().m_Units));
+				__instance.m_Liquid = __instance.GetCapacityLitres() * ModComponent.Utils.RandomUtils.Range(1f / 8f, 1f);
 			}
 		}
 	}
