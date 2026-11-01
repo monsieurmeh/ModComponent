@@ -75,12 +75,56 @@ internal class Implementation : MelonMod
 	[HarmonyPatch(typeof(GearItem), nameof(GearItem.SetDamageBlendValue))]
 	internal static class gisetdmg
 	{
+		private static readonly int DamageTextureID = Shader.PropertyToID("_dmg_texture");
+
 		internal static void Prefix(GearItem __instance, float blendVal, ref bool __runOriginal)
 		{
 			ModBaseComponent modComponent = ModComponent.Utils.ComponentUtils.GetModComponent(__instance);
-			if (modComponent != null)
+			if (modComponent != null && !HasUsableDamageTexture(__instance))
 			{
 				__runOriginal = false;
+			}
+		}
+
+		private static bool HasUsableDamageTexture(GearItem gearItem)
+		{
+			if (gearItem.m_MeshRenderers == null || gearItem.m_SkinnedMeshRenderers == null)
+			{
+				return false;
+			}
+
+			bool foundDamageTexture = false;
+			foreach (Renderer renderer in GetRenderers(gearItem))
+			{
+				if (renderer == null)
+				{
+					continue;
+				}
+				foreach (Material material in renderer.sharedMaterials)
+				{
+					if (material == null || !material.HasProperty(DamageTextureID))
+					{
+						continue;
+					}
+					if (material.GetTexture(DamageTextureID) == null)
+					{
+						return false;
+					}
+					foundDamageTexture = true;
+				}
+			}
+			return foundDamageTexture;
+		}
+
+		private static IEnumerable<Renderer> GetRenderers(GearItem gearItem)
+		{
+			foreach (MeshRenderer renderer in gearItem.m_MeshRenderers)
+			{
+				yield return renderer;
+			}
+			foreach (SkinnedMeshRenderer renderer in gearItem.m_SkinnedMeshRenderers)
+			{
+				yield return renderer;
 			}
 		}
 	}
