@@ -59,9 +59,14 @@ namespace CraftingRevisions
 		[HarmonyPatch(typeof(CookableListItem), nameof(CookableListItem.SetCookable))]
 		private static void CookableListItem_SetCookable(CookableListItem __instance, CookableItem cookableItem, CookingPotItem cookingPot)
 		{
-			if (cookableItem.m_GearItem.GetComponent<Cookable>().m_CookedPrefab != null)
+			if (__instance.m_ItemIcon.mainTexture != null || cookableItem.m_GearItem == null)
 			{
-				__instance.m_ItemIcon.mainTexture = cookableItem.m_GearItem.GetComponent<Cookable>().m_CookedPrefab.GetInventoryIconTexture();
+				return;
+			}
+			Cookable cookable = cookableItem.m_GearItem.GetComponent<Cookable>();
+			if (cookable != null && cookable.m_CookedPrefab != null)
+			{
+				__instance.m_ItemIcon.mainTexture = cookable.m_CookedPrefab.GetInventoryIconTexture();
 				__instance.gameObject.GetComponentInChildren<UITexture>().enabled = true;
 			}
 
