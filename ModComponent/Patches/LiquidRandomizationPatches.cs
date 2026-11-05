@@ -13,7 +13,7 @@ internal class LiquidItemPatch
 	{
 		private static void Postfix(LiquidItem __instance)
 		{
-			if (!Settings.instance.randomPlasticWaterBottles && (__instance.name == "GEAR_Water500ml" || __instance.name == "GEAR_Water1000ml"))
+			if (!Settings.instance.randomPlasticWaterBottles && (__instance.name.Contains("GEAR_Water500ml") || __instance.name.Contains("GEAR_Water1000ml")))
 			{
 				return;
 			}
